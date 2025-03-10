@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../src/index';
+import { app } from '../index';
 
 describe('Items API', () => {
   it('should return a list of items', async () => {

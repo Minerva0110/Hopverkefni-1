@@ -10,21 +10,22 @@ export const getItems = async (req: Request, res: Response) => {
   }
 };
 
-export const getItemById = async (req: Request, res: Response) => {
-  try {
-    const { id } = req.params;
-    const item = await prisma.notes.findUnique({ where: { id: Number(id) } });
-
-    if (!item) {
-      return res.status(404).json({ error: 'Item not found' });
+export const getItemById = async (req: Request, res: Response): Promise<void> => {
+    try {
+      const { id } = req.params;
+      const item = await prisma.notes.findUnique({ where: { id: Number(id) } });
+  
+      if (!item) {
+        res.status(404).json({ error: 'Item not found' });
+        return;
+      }
+  
+      res.json(item);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch item' });
     }
-
-    res.json(item);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch item' });
-  }
-};
-
+  };
+  
 export const createItem = async (req: Request, res: Response) => {
   try {
     const { user_id, title, content, is_public } = req.body;

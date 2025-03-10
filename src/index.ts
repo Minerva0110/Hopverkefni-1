@@ -2,10 +2,9 @@ import express from 'express';
 import itemRoutes from './routes/items';
 import categoryRoutes from './routes/categories';
 
-const app = express();
+export const app = express();
 app.use(express.json());
 
-// Root endpoint
 app.get('/', (req, res) => {
   res.json({
     message: 'Welcome to the minnislistakerfi API',
@@ -16,7 +15,6 @@ app.get('/', (req, res) => {
   });
 });
 
-// Use our routes
 app.use('/items', itemRoutes);
 app.use('/categories', categoryRoutes);
 
