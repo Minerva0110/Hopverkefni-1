@@ -1,18 +1,13 @@
-import { Router } from 'express';
-import { getItems, getItemById, createItem, updateItem, deleteItem } from '../controllers/itemController';
-import { validate } from '../middleware/validate';
-import { noteSchema } from '../validation/schemas';
+import { Router } from "express";
+import { getItems, getItemById, createItem, updateItem, deleteItem } from "../controllers/itemController";
+import { authenticate } from "../middleware/auth";
 
 const router = Router();
 
-router.get('/', getItems);
-
-router.get('/:id', getItemById);
-
-router.post('/', validate(noteSchema), createItem);
-
-router.put('/:id', validate(noteSchema), updateItem);
-
-router.delete('/:id', deleteItem);
+router.get("/", authenticate, getItems);
+router.get("/:id", authenticate, getItemById);
+router.post("/", authenticate, createItem);
+router.put("/:id", authenticate, updateItem);
+router.delete("/:id", authenticate, deleteItem);
 
 export default router;
