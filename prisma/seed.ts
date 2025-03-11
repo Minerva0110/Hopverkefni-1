@@ -6,6 +6,10 @@ const prisma = new PrismaClient();
 async function seed() {
   console.log("Seeding database...");
 
+  await prisma.note.deleteMany(); 
+  await prisma.user.deleteMany();
+  await prisma.category.deleteMany();
+
   const users: { id: number }[] = [];
   const categories: { id: number }[] = [];
 
@@ -18,32 +22,28 @@ async function seed() {
         role: "user",
       },
     });
-    users.push(user);
+    users.push({ id: Number(user.id) });
   }
 
   for (let i = 0; i < 5; i++) {
     const category = await prisma.category.create({
-      data: {
-        name: faker.word.noun(),
-      },
+      data: { name: faker.word.noun() },
     });
-    categories.push(category);
+    categories.push({ id: Number(category.id) }); 
   }
 
   for (let i = 0; i < 40; i++) {
     const randomUser = users[Math.floor(Math.random() * users.length)];
-    if (!randomUser) continue;
-
     const randomCategory = categories[Math.floor(Math.random() * categories.length)];
 
-    const note = await prisma.note.create({
+    await prisma.note.create({
       data: {
-        userId: randomUser.id,
+        userId: Number(randomUser.id), 
         title: faker.lorem.words(3),
         content: faker.lorem.sentence(),
         isPublic: faker.datatype.boolean(),
         createdAt: new Date(),
-        categoryId: randomCategory ? randomCategory.id : null,
+        categoryId: randomCategory ? Number(randomCategory.id) : null,
       },
     });
   }
@@ -52,5 +52,8 @@ async function seed() {
 }
 
 seed()
-  .catch((e) => console.error("Seeding failed:", e))
+  .catch((e) => {
+    console.error("Seeding failed:", e);
+    process.exit(1);
+  })
   .finally(() => prisma.$disconnect());
