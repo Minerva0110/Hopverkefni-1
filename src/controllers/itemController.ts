@@ -3,7 +3,7 @@ import prisma from '../models/db';
 
 export const getItems = async (req: Request, res: Response) => {
   try {
-    const items = await prisma.notes.findMany();
+    const items = await prisma.note.findMany();
     res.json(items);
   } catch (error) {
     res.status(500).json({ error: 'Failed to fetch items' });
@@ -13,7 +13,7 @@ export const getItems = async (req: Request, res: Response) => {
 export const getItemById = async (req: Request, res: Response): Promise<void> => {
     try {
       const { id } = req.params;
-      const item = await prisma.notes.findUnique({ where: { id: Number(id) } });
+      const item = await prisma.note.findUnique({ where: { id: Number(id) } });
   
       if (!item) {
         res.status(404).json({ error: 'Item not found' });
@@ -28,10 +28,10 @@ export const getItemById = async (req: Request, res: Response): Promise<void> =>
   
 export const createItem = async (req: Request, res: Response) => {
   try {
-    const { user_id, title, content, is_public } = req.body;
+    const { userId, title, content, isPublic } = req.body;
 
-    const newItem = await prisma.notes.create({
-      data: { user_id, title, content, is_public }
+    const newItem = await prisma.note.create({
+      data: { userId, title, content, isPublic }
     });
 
     res.status(201).json(newItem);
@@ -43,11 +43,11 @@ export const createItem = async (req: Request, res: Response) => {
 export const updateItem = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { title, content, is_public } = req.body;
+    const { title, content, isPublic } = req.body;
 
-    const updatedItem = await prisma.notes.update({
+    const updatedItem = await prisma.note.update({
       where: { id: Number(id) },
-      data: { title, content, is_public }
+      data: { title, content, isPublic }
     });
 
     res.json(updatedItem);
@@ -60,7 +60,7 @@ export const deleteItem = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    await prisma.notes.delete({ where: { id: Number(id) } });
+    await prisma.note.delete({ where: { id: Number(id) } });
     res.status(204).send();
   } catch (error) {
     res.status(500).json({ error: 'Failed to delete item' });

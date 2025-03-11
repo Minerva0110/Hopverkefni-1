@@ -43,7 +43,7 @@ async function seed() {
         categoryId: getCategoryId("Skipulag"),
         tags: ["fundir"],
         priority: false,
-        modified: 1635638400000,
+        modified: new Date(1635638400000).toISOString(),
         due: 1636648500000,
         deleted: false,
         completed: false,

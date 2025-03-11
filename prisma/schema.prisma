@@ -40,8 +40,8 @@ model Item {
   categoryId  Int?
   tags        String[]
   priority    Boolean   @default(false)
-  modified    BigInt
-  due         BigInt?
+  modified    DateTime @default(now())
+  due         DateTime?
   deleted     Boolean   @default(false)
   completed   Boolean   @default(false)
   createdAt   DateTime  @default(now())
