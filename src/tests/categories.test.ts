@@ -3,13 +3,13 @@ import { app } from '../index';
 import prisma from '../models/db';
 
 beforeAll(async () => {
-  await prisma.categories.deleteMany();
-});
-
-afterAll(async () => {
-  await prisma.$disconnect(); 
-});
-
+    await prisma.category.deleteMany();
+  });
+  
+  beforeAll(async () => {
+    await prisma.note.deleteMany();
+  });
+  
 describe('Categories API', () => {
   let categoryId: number;
 
