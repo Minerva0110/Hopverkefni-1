@@ -6,38 +6,52 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-
-  directUrl = "postgresql://neondb_owner:npg_ZUNpVlE83rvK@ep-hidden-mud-a93m20ro-pooler.gwc.azure.neon.tech/neondb?sslmode=require"
 }
 
-
 model User {
-  id        Int    @id @default(autoincrement())
-  username  String @unique
-  email     String @unique
+  id        Int      @id @default(autoincrement())
+  username  String   @unique
+  email     String   @unique
   password  String
-  role      String @default("user")
+  role      String   @default("user")
   createdAt DateTime @default(now())
 
   notes Note[]
 }
 
 model Note {
-  id         Int      @id @default(autoincrement())
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
-  title      String
-  content    String?
-  isPublic   Boolean  @default(false)
-  createdAt  DateTime @default(now())
+  id        Int      @id @default(autoincrement())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    Int
+  title     String
+  content   String?
+  isPublic  Boolean  @default(false)
+  createdAt DateTime @default(now())
 
-  category   Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  category   Category? @relation(name: "NoteToCategory", fields: [categoryId], references: [id], onDelete: SetNull)
   categoryId Int?
 }
 
-model Category {
-  id    Int    @id @default(autoincrement())
-  name  String @unique
+model Item {
+  id          Int       @id @default(autoincrement())
+  title       String
+  description String?
+  category    Category? @relation(name: "ItemToCategory", fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId  Int?
+  tags        String[]
+  priority    Boolean   @default(false)
+  modified    BigInt
+  due         BigInt?
+  deleted     Boolean   @default(false)
+  completed   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+}
 
-  notes Note[]
+model Category {
+  id        Int      @id @default(autoincrement())
+  title     String   @unique
+  createdAt DateTime @default(now())
+
+  items Item[] @relation(name: "ItemToCategory")
+  notes Note[] @relation(name: "NoteToCategory")
 }
