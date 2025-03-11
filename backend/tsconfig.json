@@ -1,15 +1,15 @@
 {
   "compilerOptions": {
     "target": "ES6",                                
-    "module": "CommonJS",                           
-    "outDir": "./dist",           
+    "module": "ESNext",                           
+    "outDir": "./",           
     "rootDir": "./src",          
     "strict": true,                
     "esModuleInterop": true,       
     "forceConsistentCasingInFileNames": true,      
     "skipLibCheck": true,          
-    "noEmitOnError": true,     
-    "resolveJsonModule": true,  
+    "noEmitOnError": true,
+    "moduleResolution": "node",
     "allowJs": false          
   },
   "include": ["src"],            
