@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 async function fetchNotes() {
   const usersWithNotes = await prisma.user.findMany({
     include: {
-      notes: true, // Nær í allar tengdar "notes" fyrir hvern notanda
+      notes: true,
     },
   });
 

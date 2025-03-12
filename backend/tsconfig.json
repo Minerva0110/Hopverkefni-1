@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "target": "ESNext",
+    "resolveJsonModule": true,
     "esModuleInterop": true,
     "strict": true
   },
-  "include": ["src"],
+  "include": ["src/**/*", "jest.setup.ts"],
 }

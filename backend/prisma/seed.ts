@@ -1,83 +1,125 @@
 import { PrismaClient } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+const dataPath = path.resolve(__dirname, '../data/data.json');
+const rawData = fs.readFileSync(dataPath, 'utf-8');
+const jsonData = JSON.parse(rawData);
 
 const prisma = new PrismaClient();
 
 async function main() {
+ 
+  for (const category of jsonData.categories) {
+    await prisma.category.upsert({
+      where: { id: category.id },
+      update: { title: category.title },
+      create: { id: category.id, title: category.title },
+    });
+  }
 
-  const designCategory = await prisma.category.create({
-    data: { title: 'Hönnun' },
-  });
-
-  const developmentCategory = await prisma.category.create({
-    data: { title: 'Forritun' },
-  });
-
-  const managementCategory = await prisma.category.create({
-    data: { title: 'Stjórnun' },
-  });
-
-  const user = await prisma.user.create({
-    data: {
-      username: 'developer123',
-      email: 'dev@example.com',
-      password: 'hashedpassword123',
-      role: 'admin',
-      notes: {
-        create: [
-          { title: 'Muna að uppfæra TypeScript', content: 'Ný útgáfa kom út', isPublic: true },
-          { title: 'Kanna React Server Components', content: 'Athuga hvort það hentar verkefninu okkar', isPublic: false },
-        ],
+  for (const item of jsonData.items) {
+    await prisma.item.upsert({
+      where: { id: item.id },
+      update: {
+        title: item.title,
+        description: item.description,
+        categoryId: item.category,
       },
-    },
-  });
-
-  await prisma.item.createMany({
-    data: [
-      {
-        title: 'Endurbæta lógó og litapallettu',
-        description: 'Nýtt branding fyrir vefsíðuna',
-        categoryId: designCategory.id,
-        tags: ['UI', 'Branding'],
-        priority: true,
-        due: new Date('2025-06-01'),
+      create: {
+        id: item.id,
+        title: item.title,
+        description: item.description,
+        categoryId: item.category,
       },
-      {
-        title: 'Bæta við JWT auðkenningu',
-        description: 'Til að bæta öryggi API þjónustunnar',
-        categoryId: developmentCategory.id,
-        tags: ['Öryggi', 'Auth'],
-        priority: false,
-        due: new Date('2025-05-20'),
-      },
-      {
-        title: 'Skipuleggja næsta sprint',
-        description: 'Ákveða markmið og verkefni fyrir næstu viku',
-        categoryId: managementCategory.id,
-        tags: ['Scrum', 'Skipulag'],
-        priority: true,
-        due: new Date('2025-04-10'),
-      },
-      {
-        title: 'Hanna notendaskráningu',
-        description: 'Bæta við nýjum skráningarflæði',
-        categoryId: designCategory.id,
-        tags: ['UI', 'UX'],
-        priority: false,
-        due: null,
-      },
-      {
-        title: 'Gera prófanir á API',
-        description: 'Nota Jest og Supertest fyrir einingaprófanir',
-        categoryId: developmentCategory.id,
-        tags: ['Testing', 'Jest'],
-        priority: false,
-        due: new Date('2025-05-25'),
-      },
-    ],
-  });
-
-  console.log('Gögn hafa verið sett í gagnagrunninn.');
+    });
+  }
 }
+
+const hönnunarFlokkur = await prisma.category.upsert({
+  where: { title: 'Hönnun' },
+  update: {},
+  create: { title: 'Hönnun' },
+});
+
+const þróunarFlokkur = await prisma.category.upsert({
+  where: { title: 'Þróun' },
+  update: {},
+  create: { title: 'Þróun' },
+});
+
+const stjórnunFlokkur = await prisma.category.upsert({
+  where: { title: 'Stjórnun' },
+  update: {},
+  create: { title: 'Stjórnun' },
+});
+
+
+const notandi = await prisma.user.create({
+  data: {
+    username: 'Rafael',
+    email: 'Rafael@example.com',
+    password: 'öruggtlykilorð111',
+    role: 'superadmin2',
+    notes: {
+      create: [
+        { title: 'Uppfæra Prisma', content: 'Laga seed.ts', isPublic: true },
+        { title: 'Meta tól', content: 'Kanna hentugar lausnir', isPublic: false },
+      ],
+    },
+  },
+});
+
+await prisma.item.createMany({
+  data: [
+    {
+      title: 'Endurnýja viðmótshönnun',
+      description: 'Ný hönnun fyrir notendaupplifun',
+      categoryId: hönnunarFlokkur.id,
+      tags: ['UI', 'Hönnun'],
+      priority: true,
+      due: new Date('2025-07-01'),
+    },
+    {
+      title: 'Innleiða OAuth auðkenningu',
+      description: 'Nota OAuth fyrir öruggari innskráningar',
+      categoryId: þróunarFlokkur.id,
+      tags: ['Öryggi', 'Auth'],
+      priority: true,
+      due: new Date('2025-06-01'),
+    },
+    {
+      title: 'Skipuleggja helgarhóp fund',
+      description: 'Skipuleggja markmið og verkefni fyrir næstu mánuði',
+      categoryId: stjórnunFlokkur.id,
+      tags: ['Stjórnun', 'Fundur'],
+      priority: false,
+      due: new Date('2025-05-15'),
+    },
+    {
+      title: 'Bæta við nýrri eiginleika á skráningarsíðu',
+      description: 'Bæta við valmöguleikum fyrir félagsaðild',
+      categoryId: hönnunarFlokkur.id,
+      tags: ['UX', 'Hönnun'],
+      priority: false,
+      due: null,
+    },
+    {
+      title: 'Einingaprófanir á bakenda-API',
+      description: 'Nota Jest fyrir einingaprófanir á nýjum endapunktum',
+      categoryId: þróunarFlokkur.id,
+      tags: ['Testing', 'Jest'],
+      priority: true,
+      due: new Date('2025-06-15'),
+    },
+  ],
+});
+
+console.log('Gögn hafa verið skráð í gagnagrunn.');
 
 main()
   .catch((e) => {
