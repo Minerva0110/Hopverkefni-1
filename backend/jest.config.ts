@@ -1,9 +1,11 @@
-import type { JestConfigWithTsJest } from 'ts-jest';
-
-const config: JestConfigWithTsJest = {
+export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  testMatch: ['**/tests/**/*.test.ts']
-};
+  moduleNameMapper: {
+    '^(\\..*)\\.js$': '$1', 
+  },
+  moduleFileExtensions: ['ts', 'js'],
+  testMatch: ['**/*.test.ts'],
+  setupFiles: ["<rootDir>/jest.setup.ts"],
 
-export default config;
+};

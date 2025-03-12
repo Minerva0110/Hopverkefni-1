@@ -1,6 +1,9 @@
 import request from 'supertest';
 import { app } from '../index.js';
 import prisma from '../models/db.js';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: '.env' });
 
 beforeAll(async () => {
     await prisma.note.deleteMany();
