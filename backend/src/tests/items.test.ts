@@ -61,3 +61,8 @@ describe('Notes API Tests', () => {
     expect(response.status).toBe(404);
   });
 });
+
+
+afterAll(async () => {
+  await prisma.$disconnect();
+});

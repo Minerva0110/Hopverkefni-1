@@ -1,136 +1,89 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
-async function seed() {
-  console.log("Seeding database...");
+async function main() {
 
-  await prisma.note.deleteMany();
-  await prisma.item.deleteMany();
-  await prisma.category.deleteMany();
-
-  const categories = await prisma.category.createMany({
-    data: [
-      { title: "Vefforrit" },
-      { title: "Skipulag" },
-      { title: "Vefþjónustur" }
-    ]
+  const designCategory = await prisma.category.create({
+    data: { title: 'Hönnun' },
   });
 
-  console.log("Categories added.");
-  const categoryMap = await prisma.category.findMany();
+  const developmentCategory = await prisma.category.create({
+    data: { title: 'Forritun' },
+  });
 
-  function getCategoryId(title: string) {
-    return categoryMap.find((c) => c.title === title)?.id || null;
-  }
+  const managementCategory = await prisma.category.create({
+    data: { title: 'Stjórnun' },
+  });
+
+  const user = await prisma.user.create({
+    data: {
+      username: 'developer123',
+      email: 'dev@example.com',
+      password: 'hashedpassword123',
+      role: 'admin',
+      notes: {
+        create: [
+          { title: 'Muna að uppfæra TypeScript', content: 'Ný útgáfa kom út', isPublic: true },
+          { title: 'Kanna React Server Components', content: 'Athuga hvort það hentar verkefninu okkar', isPublic: false },
+        ],
+      },
+    },
+  });
 
   await prisma.item.createMany({
     data: [
       {
-        title: "Útfæra prótótýpu viðmót fyrir v1 af vefforriti",
-        description: "",
-        categoryId: getCategoryId("Vefforrit") || null,
-        tags: ["framendi", "html"],
-        priority: false,
-        modified: new Date(1635638400000),
-        due: new Date(1638648500000),
-        deleted: false,
-        completed: false,
+        title: 'Endurbæta lógó og litapallettu',
+        description: 'Nýtt branding fyrir vefsíðuna',
+        categoryId: designCategory.id,
+        tags: ['UI', 'Branding'],
+        priority: true,
+        due: new Date('2025-06-01'),
       },
       {
-        title: "Bóka planning fyrir sprett #4",
-        description: "Eftir retro fyrir sprett #3",
-        categoryId: getCategoryId("Skipulag") || null,
-        tags: ["fundir"],
+        title: 'Bæta við JWT auðkenningu',
+        description: 'Til að bæta öryggi API þjónustunnar',
+        categoryId: developmentCategory.id,
+        tags: ['Öryggi', 'Auth'],
         priority: false,
-        modified: new Date(1635638400000),
-        due: new Date(1636648500000),
-        deleted: false,
-        completed: false,
+        due: new Date('2025-05-20'),
       },
       {
-        title: "Test task fyrir deleted",
-        description: "vefþjónustur",
-        categoryId: null,
-        tags: [],
+        title: 'Skipuleggja næsta sprint',
+        description: 'Ákveða markmið og verkefni fyrir næstu viku',
+        categoryId: managementCategory.id,
+        tags: ['Scrum', 'Skipulag'],
+        priority: true,
+        due: new Date('2025-04-10'),
+      },
+      {
+        title: 'Hanna notendaskráningu',
+        description: 'Bæta við nýjum skráningarflæði',
+        categoryId: designCategory.id,
+        tags: ['UI', 'UX'],
         priority: false,
-        modified: new Date(1635638400000),
         due: null,
-        deleted: true,
-        completed: false,
       },
       {
-        title: "Test task sem er lokið",
-        description: "",
-        categoryId: getCategoryId("Vefforrit") || null,
-        tags: [],
+        title: 'Gera prófanir á API',
+        description: 'Nota Jest og Supertest fyrir einingaprófanir',
+        categoryId: developmentCategory.id,
+        tags: ['Testing', 'Jest'],
         priority: false,
-        modified: new Date(1635638400000),
-        due: new Date(1638648500000),
-        deleted: false,
-        completed: true,
+        due: new Date('2025-05-25'),
       },
-      {
-        title: "Hönnun á útliti",
-        description: "Við verðum að fá alvöru hönnun, þetta gengur ekki lengur",
-        categoryId: getCategoryId("Vefforrit") || null,
-        tags: ["framendi", "hönnun"],
-        priority: false,
-        modified: new Date(1635638400000),
-        due: null,
-        deleted: false,
-        completed: false,
-      },
-      {
-        title: "Útfæra nýtt gagnagrunnsskema",
-        description: "Samræma við nýjustu hönnunarskjöl",
-        categoryId: getCategoryId("Vefþjónustur") || null,
-        tags: ["bakendi", "gagnagrunnur"],
-        priority: false,
-        modified: new Date(1635638400000),
-        due: new Date(1638648500000),
-        deleted: false,
-        completed: false,
-      },
-      {
-        title: "v1.5 af vefþjónustuskilum",
-        description: "Farið að blokka næsta sprett",
-        categoryId: getCategoryId("Vefþjónustur") || null,
-        tags: ["bakendi"],
-        priority: false,
-        modified: new Date(1635638400000),
-        due: new Date(1638648500000),
-        deleted: false,
-        completed: false,
-      },
-      {
-        title: "Ráða verkefnastjóra",
-        description: "Við erum mjög óskipulögð, sem er mjög kaldhæðið miðað við verkefnið sem við erum að vinna",
-        categoryId: getCategoryId("Skipulag") || null,
-        tags: ["ráðning"],
-        priority: false,
-        modified: new Date(1635638400000),
-        due: new Date(1638648500000),
-        deleted: false,
-        completed: false,
-      },
-      {
-        title: "Velja framendaframework til að vinna í",
-        description: "Vanilla JS er fínt, en við vinnum þetta hraðar ef við veljum gott framework",
-        categoryId: getCategoryId("Vefforrit") || null,
-        tags: ["framendi", "framework"],
-        priority: false,
-        modified: new Date(1635638400000),
-        due: null,
-        deleted: false,
-        completed: false,
-      }
     ],
   });
 
-  console.log("Items added.");
+  console.log('Gögn hafa verið sett í gagnagrunninn.');
 }
 
-seed()
-  .catch((e) => console.error("Seeding failed:", e))
-  .finally(() => prisma.$disconnect());
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
