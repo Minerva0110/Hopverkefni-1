@@ -1,17 +1,12 @@
 {
   "compilerOptions": {
-    "target": "ES6",                                
-    "module": "NodeNext",                           
-    "outDir": "./dist",           
-    "rootDir": "backend/src",          
-    "strict": true,                
-    "esModuleInterop": true,       
-    "forceConsistentCasingInFileNames": true,      
-    "skipLibCheck": true,          
-    "noEmitOnError": true,     
-    "resolveJsonModule": true,  
-    "allowJs": false          
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "strict": true
   },
-  "include": ["backend/src"],            
-  "exclude": ["node_modules", "dist"]
+  "include": ["src"],
 }

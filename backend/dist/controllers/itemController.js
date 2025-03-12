@@ -1,4 +1,4 @@
-import prisma from '../models/db';
+import prisma from '../models/db.js';
 export const getItems = async (req, res) => {
     try {
         const items = await prisma.note.findMany();

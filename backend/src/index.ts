@@ -1,9 +1,9 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import itemRoutes from "./routes/items.js";
-import categoryRoutes from "./routes/categories";
-import imageRoutes from "./routes/imageRoutes"; 
+import items from "./routes/items.js"; 
+import categoryRoutes from "./routes/categories.js";
+import imageRoutes from "./routes/imageRoutes.js"; 
 
 dotenv.config();
 
@@ -13,7 +13,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
-app.use("/items", itemRoutes);
+app.use("/items", items);
 app.use("/categories", categoryRoutes);
 app.use("/images", imageRoutes);
 

@@ -1,6 +1,6 @@
 import { Router } from "express";
-import { getItems, getItemById, createItem, updateItem, deleteItem } from "../controllers/itemController";
-import { authenticate } from "../middleware/auth";
+import { getItems, getItemById, createItem, updateItem, deleteItem } from "../controllers/itemController.js";
+import { authenticate } from "../middleware/auth.js";
 
 const router = Router();
 

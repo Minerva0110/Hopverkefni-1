@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
-import prisma from "../models/db";
+import prisma from "../models/db.js";
 dotenv.config();
 const SECRET_KEY = process.env.JWT_SECRET || "supersecretkey";
 export const registerUser = async (req, res) => {

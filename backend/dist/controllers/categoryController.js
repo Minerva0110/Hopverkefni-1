@@ -1,4 +1,4 @@
-import prisma from '../models/db';
+import prisma from '../models/db.js';
 export const getCategories = async (req, res) => {
     try {
         const categories = await prisma.category.findMany();

@@ -1,6 +1,6 @@
 import request from 'supertest';
-import { app } from '../index'; 
-import prisma from '../models/db'; 
+import { app } from '../index.js'; 
+import prisma from '../models/db.js'; 
 
 beforeAll(async () => {
   await prisma.note.deleteMany();

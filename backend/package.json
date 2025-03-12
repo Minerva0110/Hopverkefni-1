@@ -6,10 +6,9 @@
   "main": "./src/index.ts",
   "type": "module",
   "scripts": {
-    "dev": "NODE_OPTIONS='--loader ts-node/esm' ts-node-esm ./src/index.ts",
-    "start": "node ./src/index.ts",
+    "start": "node --loader ts-node/esm --es-module-specifier-resolution=node src/index.ts",
     "build": "tsc",
-    "test": "jest",
+    "serve": "node --es-module-specifier-resolution=node dist/index.js",
     "test:watch": "jest --watch"
   },
   "dependencies": {
