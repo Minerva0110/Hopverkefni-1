@@ -22,7 +22,7 @@ try {
   authRoutes = require("./routes/authRoutes").default;
   app.use("/auth", authRoutes);
 } catch (error) {
-  console.warn("⚠️ Warning: skipping auth routes.");
+  console.warn("Warning: skipping auth routes.");
 }
 
 app.get("/", (req, res) => {

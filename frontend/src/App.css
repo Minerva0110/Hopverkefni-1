@@ -40,3 +40,75 @@
 .read-the-docs {
   color: #888;
 }
+
+.container {
+  display: flex;
+  font-family: Arial, sans-serif;
+}
+
+.sidebar {
+  width: 200px;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar h2 {
+  font-size: 18px;
+  margin-bottom: 5px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content {
+  flex-grow: 1;
+  padding: 20px;
+}
+
+.task {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 0;
+}
+
+.task input {
+  margin-right: 10px;
+}
+
+.date {
+  font-size: 12px;
+  color: #777;
+}
+
+.tags {
+  display: flex;
+  gap: 5px;
+}
+
+.tag {
+  background: #ddd;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.category {
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.add-task {
+  margin-top: 20px;
+  padding: 10px;
+  background: #eee;
+  border: none;
+  cursor: pointer;
+}
+

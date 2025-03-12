@@ -1,44 +1,35 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 
-interface Todo {
-  id: number;
-  title: string;
-  description?: string;
-  completed: boolean;
-  dueDate?: string;
-  tags?: string[];
-  category?: string;
-}
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
 function App() {
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const [newTodo, setNewTodo] = useState("");
+  const [items, setItems] = useState([]);
 
-  // 📌 Sækja gögn frá backend þegar síðan opnast
   useEffect(() => {
-    fetch("http://localhost:5000/notes")
+    console.log(`Sæki gögn frá: ${API_URL}/items`);
+    fetch(`${API_URL}/items`)
       .then((res) => res.json())
-      .then((data) => setTodos(data))
+      .then((data) => setItems(data))
       .catch((error) => console.error("Villa við að sækja gögn:", error));
   }, []);
 
-  // 📌 Birta gögnin á síðunni
   return (
     <div className="App">
-      <h1>Verkefnalistinn</h1>
+      <h1>Verkefnalisti</h1>
       <ul>
-        {todos.map((todo) => (
-          <li key={todo.id}>
-            <strong>{todo.title}</strong>
-            {todo.description && <p>{todo.description}</p>}
-            {todo.dueDate && <p>{new Date(todo.dueDate).toLocaleDateString()}</p>}
-            {todo.tags && todo.tags.map((tag, index) => (
-              <span key={index} className="tag">{tag}</span>
-            ))}
-            {todo.category && <span className="category">{todo.category}</span>}
-          </li>
-        ))}
+        {items.length > 0 ? (
+          items.map((item) => (
+            <li key={item.id}>
+              <h2>{item.title}</h2>
+              <p>{item.content}</p>
+              <p><strong>Opinber:</strong> {item.isPublic ? "Já" : "Nei"}</p>
+              <p><strong>Dagsetning:</strong> {new Date(item.createdAt).toLocaleDateString()}</p>
+            </li>
+          ))
+        ) : (
+          <p>Engin verkefni fundust!</p>
+        )}
       </ul>
     </div>
   );
