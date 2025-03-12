@@ -48,7 +48,7 @@ model Item {
 }
 
 model Category {
-  id        String   @id
+  id    Int    @id @default(autoincrement()) 
   title     String   @unique
   createdAt DateTime @default(now())
 

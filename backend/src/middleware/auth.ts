@@ -19,11 +19,10 @@ export const authenticate = (req: AuthRequest, res: Response, next: NextFunction
 
   try {
     const decoded = jwt.verify(token, SECRET_KEY) as { id: number; username: string; role: string };
-    req.user = decoded;
+    req.user = decoded; 
     next();
   } catch {
     res.status(403).json({ error: "Invalid token." });
-    return;
   }
 };
 
@@ -34,4 +33,3 @@ export const isAdmin = (req: AuthRequest, res: Response, next: NextFunction): vo
   }
   next();
 };
-

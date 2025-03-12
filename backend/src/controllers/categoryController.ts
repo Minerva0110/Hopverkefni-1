@@ -1,68 +1,96 @@
-import { Request, Response } from 'express';
-import prisma from '../models/db.js';
+import { Request, Response } from "express";
+import prisma from "../models/db.js";
 
 export const getCategories = async (req: Request, res: Response) => {
   try {
-    const categories = await prisma.category.findMany(); 
+    const categories = await prisma.category.findMany();
     res.json(categories);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch categories' });
+    console.error("Error fetching categories:", error);
+    res.status(500).json({ error: "Failed to fetch categories" });
   }
 };
 
 export const getCategoryById = async (req: Request, res: Response): Promise<void> => {
   try {
-    const { id } = req.params;
-    const category = await prisma.category.findUnique({ where: { id: Number(id) } });
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ error: "Invalid category ID" });
+      return;
+    }
+
+    const category = await prisma.category.findUnique({ where: { id } });
 
     if (!category) {
-      res.status(404).json({ error: 'Category not found' });
+      res.status(404).json({ error: "Category not found" });
       return;
     }
 
     res.json(category);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch category' });
+    console.error("Error fetching category:", error);
+    res.status(500).json({ error: "Failed to fetch category" });
   }
 };
 
 export const createCategory = async (req: Request, res: Response) => {
   try {
     const { title } = req.body;
+    
+    if (!title || typeof title !== "string" || title.trim().length === 0) {
+      res.status(400).json({ error: "Title is required and must be a non-empty string" });
+      return;
+    }
 
-    const newCategory = await prisma.category.create({ 
-      data: { title }
+    const newCategory = await prisma.category.create({
+      data: { title: title.trim() },
     });
 
     res.status(201).json(newCategory);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create category' });
+    console.error("Error creating category:", error);
+    res.status(500).json({ error: "Failed to create category" });
   }
 };
 
 export const updateCategory = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const { title } = req.body;
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ error: "Invalid category ID" });
+      return;
+    }
 
-    const updatedCategory = await prisma.category.update({ 
-      where: { id: Number(id) },
-      data: { title }
+    const { title } = req.body;
+    if (!title || typeof title !== "string" || title.trim().length === 0) {
+      res.status(400).json({ error: "Title is required and must be a non-empty string" });
+      return;
+    }
+
+    const updatedCategory = await prisma.category.update({
+      where: { id },
+      data: { title: title.trim() },
     });
 
     res.json(updatedCategory);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update category' });
+    console.error("Error updating category:", error);
+    res.status(500).json({ error: "Failed to update category" });
   }
 };
 
 export const deleteCategory = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
+    if (isNaN(id)) {
+      res.status(400).json({ error: "Invalid category ID" });
+      return;
+    }
 
-    await prisma.category.delete({ where: { id: Number(id) } }); 
+    await prisma.category.delete({ where: { id } });
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete category' });
+    console.error("Error deleting category:", error);
+    res.status(500).json({ error: "Failed to delete category" });
   }
 };

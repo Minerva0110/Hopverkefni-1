@@ -1,37 +1,51 @@
-import { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import LoginPage from "./pages/loginPage";
+import ChecklistPage from "./pages/homePage";
+import AdminDashboard from "./pages/adminDashboard";
 import "./App.css";
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
-
 function App() {
-  const [items, setItems] = useState([]);
+  const [token, setToken] = useState<string | null>(localStorage.getItem("token"));
+  const [role, setRole] = useState<string | null>(localStorage.getItem("role"));
 
   useEffect(() => {
-    console.log(`Sæki gögn frá: ${API_URL}/items`);
-    fetch(`${API_URL}/items`)
-      .then((res) => res.json())
-      .then((data) => setItems(data))
-      .catch((error) => console.error("Villa við að sækja gögn:", error));
+    setToken(localStorage.getItem("token"));
+    setRole(localStorage.getItem("role"));
   }, []);
 
+  const handleLogin = (userToken: string, userRole: string) => {
+    localStorage.setItem("token", userToken);
+    localStorage.setItem("role", userRole);
+    setToken(userToken);
+    setRole(userRole);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setToken(null);
+    setRole(null);
+  };
+
   return (
-    <div className="App">
-      <h1>Verkefnalisti</h1>
-      <ul>
-        {items.length > 0 ? (
-          items.map((item) => (
-            <li key={item.id}>
-              <h2>{item.title}</h2>
-              <p>{item.content}</p>
-              <p><strong>Opinber:</strong> {item.isPublic ? "Já" : "Nei"}</p>
-              <p><strong>Dagsetning:</strong> {new Date(item.createdAt).toLocaleDateString()}</p>
-            </li>
-          ))
-        ) : (
-          <p>Engin verkefni fundust!</p>
-        )}
-      </ul>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+
+        <Route 
+          path="/admin-dashboard" 
+          element={role === "admin" ? <AdminDashboard onLogout={handleLogout} /> : <Navigate to="/checklist" />} 
+        />
+
+        <Route 
+          path="/checklist" 
+          element={token ? <ChecklistPage onLogout={handleLogout} /> : <Navigate to="/login" />} 
+        />
+
+        <Route path="*" element={<Navigate to={token ? "/checklist" : "/login"} />} />
+      </Routes>
+    </Router>
   );
 }
 

@@ -15,7 +15,6 @@ export const authenticate = (req, res, next) => {
     }
     catch {
         res.status(403).json({ error: "Invalid token." });
-        return;
     }
 };
 export const isAdmin = (req, res, next) => {
