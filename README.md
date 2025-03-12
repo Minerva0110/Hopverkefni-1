@@ -11,6 +11,16 @@ npx prisma db seed
 npm run dev
 
 
+## TENGJAST NEON DATA BASE##
+Keyrt var psql -h pg.neon.tech til að tengjast Neon gagnagrunninum.
+Staðfesting var framkvæmd með því að fylgja slóðinni sem birtist í tilkynningu.
+Þegar tenging var staðfest birtist listi yfir gagnagrunna með \l, og neondb var valinn.
+Nú er hægt að keyra SQL fyrirspurnir til að skoða og vinna með gögn í gagnagrunninum.
+Hvað þetta gerir:
+
+Með þessu er sett upp tenging við Neon PostgreSQL-gagnagrunn. Notkun psql gerir kleift að stjórna töflum, sækja gögn, bæta við nýjum gögnum og breyta þeim sem eru til staðar. Þannig er hægt að sjá hvað er í gagnagrunninum, prófa fyrirspurnir og undirbúa allt sem þarf fyrir þróunina.
+
+
 ### **1️. Undirbúningur**
 Áður en þú byrjar, vertu viss um að þú sért með **Node.js**, **PostgreSQL** og **Prisma** uppsett á tölvunni þinni.
 
