@@ -8,11 +8,11 @@ Velkomin/n! Þetta er leiðbeiningar um hvernig á að setja upp og keyra verkef
 npx prisma generate
 npx prisma migrate deploy
 npx prisma db seed
+npx prisma studio
 npm run dev
 
-
 ## TENGJAST NEON DATA BASE##
-Keyrt var psql -h pg.neon.tech til að tengjast Neon gagnagrunninum.
+Keyrt er psql -h pg.neon.tech til að tengjast Neon gagnagrunninum.
 Staðfesting var framkvæmd með því að fylgja slóðinni sem birtist í tilkynningu.
 Þegar tenging var staðfest birtist listi yfir gagnagrunna með \l, og neondb var valinn.
 Nú er hægt að keyra SQL fyrirspurnir til að skoða og vinna með gögn í gagnagrunninum.

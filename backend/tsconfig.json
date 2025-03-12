@@ -1,18 +1,17 @@
 {
   "compilerOptions": {
-    "module": "ESNext",
-    "target": "ES2020",
-    "moduleResolution": "Node",                          
+    "target": "ES6",                                
+    "module": "NodeNext",                           
     "outDir": "./dist",           
-    "rootDir": "src",
-    "types": ["jest"],          
+    "rootDir": "backend/src",          
     "strict": true,                
     "esModuleInterop": true,       
     "forceConsistentCasingInFileNames": true,      
     "skipLibCheck": true,          
-    "noEmitOnError": true,
+    "noEmitOnError": true,     
+    "resolveJsonModule": true,  
     "allowJs": false          
   },
-  "include": ["src"],            
+  "include": ["backend/src"],            
   "exclude": ["node_modules", "dist"]
 }
