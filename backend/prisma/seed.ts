@@ -58,16 +58,33 @@ const stjórnunFlokkur = await prisma.category.upsert({
   create: { title: 'Stjórnun' },
 });
 
+const vefforritCategory = await prisma.category.upsert({
+  where: { title: 'vefforrit' },
+  update: {},
+  create: { title: 'vefforrit' },
+});
+
+const skipulagCategory = await prisma.category.upsert({
+  where: { title: 'skipulag' },
+  update: {},
+  create: { title: 'skipulag' },
+});
+
+const vefthjonusturCategory = await prisma.category.upsert({
+  where: { title: 'vefþjónustur' },
+  update: {},
+  create: { title: 'vefþjónustur' },
+});
 
 const notandi = await prisma.user.create({
   data: {
-    username: 'Rafael',
-    email: 'Rafael@example.com',
-    password: 'öruggtlykilorð111',
-    role: 'superadmin2',
+    username: 'Pétur',
+    email: 'Minerva@example.com',
+    password: 'öruggtlykilorð1111',
+    role: 'superadmin3',
     notes: {
       create: [
-        { title: 'Uppfæra Prisma', content: 'Laga seed.ts', isPublic: true },
+        { title: 'Muna að uppfæra TypeScript', content: 'Laga seed.ts', isPublic: true },
         { title: 'Meta tól', content: 'Kanna hentugar lausnir', isPublic: false },
       ],
     },
@@ -116,7 +133,106 @@ await prisma.item.createMany({
       priority: true,
       due: new Date('2025-06-15'),
     },
-  ],
+    {
+      title: 'Útfæra prótótýpu viðmót fyrir v1 af vefforriti',
+      description: '',
+      categoryId: vefforritCategory.id,
+      tags: ['framendi', 'html'],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: new Date(1638648500000),
+      deleted: false,
+      completed: false,
+    },
+    {
+      title: 'Bóka planning fyrir sprett #4',
+      description: 'Eftir retro fyrir sprett #3',
+      categoryId: skipulagCategory.id,
+      tags: ['fundir'],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: new Date(1636648500000),
+      deleted: false,
+      completed: false,
+    },
+    {
+      title: 'Test task fyrir deleted',
+      description: 'vefþjónustur',
+      categoryId: null,
+      tags: [],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: null,
+      deleted: true,
+      completed: false,
+    },
+    {
+      title: 'Test task sem er lokið',
+      description: '',
+      categoryId: vefforritCategory.id,
+      tags: [],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: new Date(1635638500000),
+      deleted: false,
+      completed: true,
+    },
+    {
+      title: 'Hönnun á útliti',
+      description: 'Við verðum að fá alvöru hönnun, þetta gengur ekki lengur',
+      categoryId: vefforritCategory.id,
+      tags: ['framendi', 'hönnun'],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: null,
+      deleted: false,
+      completed: false,
+    },
+    {
+      title: 'Útfæra nýtt gagnagrunnsskema',
+      description: 'Samræma við nýjustu hönnunarskjöl',
+      categoryId: vefthjonusturCategory.id,
+      tags: ['bakendi', 'gagnagrunnur'],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: new Date(1636848500000),
+      deleted: false,
+      completed: false,
+    },
+    {
+      title: 'v1.5 af vefþjónustuskilum',
+      description: 'Farið að blokka næsta sprett',
+      categoryId: vefthjonusturCategory.id,
+      tags: ['bakendi'],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: new Date(1636498500000),
+      deleted: false,
+      completed: false,
+    },
+    {
+      title: 'Ráða verkefnastjóra',
+      description: 'Við erum mjög óskipulögð, sem er mjög kaldhæðið miðað við verkefnið sem við erum að vinna',
+      categoryId: skipulagCategory.id,
+      tags: ['ráðning'],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: new Date(1635498500000),
+      deleted: false,
+      completed: false,
+    },
+    {
+      title: 'Velja framendaframework til að vinna í',
+      description: 'Vanilla JS er fínt, en við vinnum þetta hraðar ef við veljum gott framework',
+      categoryId: vefforritCategory.id,
+      tags: ['framendi', 'framework'],
+      priority: false,
+      modified: new Date(1635638400000),
+      due: null,
+      deleted: false,
+      completed: false,
+    },
+  ]
 });
 
 console.log('Gögn hafa verið skráð í gagnagrunn.');
