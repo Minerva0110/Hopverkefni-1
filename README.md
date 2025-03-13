@@ -4,25 +4,18 @@
 
 Velkomin/n! Þetta er leiðbeiningar um hvernig á að setja upp og keyra verkefnið **Hopverkefni-1**.
 
+### **1️. Undirbúningur**
+Áður en þú byrjar, vertu viss um að þú sért með **Node.js**, **PostgreSQL** og **Prisma** uppsett á tölvunni þinni.
+
 ## COMMANDS ##
 npx prisma generate
 npx prisma migrate deploy
 npx prisma db seed
 npx prisma studio
+
+SVO, TIL AÐ RUNNA Á LOCALHOST;
 npm run dev
 
-## TENGJAST NEON DATA BASE##
-Keyrt er psql -h pg.neon.tech til að tengjast Neon gagnagrunninum.
-Staðfesting var framkvæmd með því að fylgja slóðinni sem birtist í tilkynningu.
-Þegar tenging var staðfest birtist listi yfir gagnagrunna með \l, og neondb var valinn.
-Nú er hægt að keyra SQL fyrirspurnir til að skoða og vinna með gögn í gagnagrunninum.
-Hvað þetta gerir:
-
-Með þessu er sett upp tenging við Neon PostgreSQL-gagnagrunn. Notkun psql gerir kleift að stjórna töflum, sækja gögn, bæta við nýjum gögnum og breyta þeim sem eru til staðar. Þannig er hægt að sjá hvað er í gagnagrunninum, prófa fyrirspurnir og undirbúa allt sem þarf fyrir þróunina.
-
-
-### **1️. Undirbúningur**
-Áður en þú byrjar, vertu viss um að þú sért með **Node.js**, **PostgreSQL** og **Prisma** uppsett á tölvunni þinni.
 
 ### **2. Afrita umhverfisbreytur**
 Þú þarft að hafa `.env` skrána með réttum gagnagrunnstengingum.
@@ -33,7 +26,7 @@ cp .env.example .env
 Opnaðu síðan `.env` og settu inn rétt **DATABASE_URL**.
 
 ### **3. Setja upp og keyra gagnagrunninn**
-Keyrðu eftirfarandi skipanir til að búa til Prisma Client, framkvæma migrations og setja gögn í gagnagrunninn:
+Keyrðu eftirfarandi skipanir í (/backend) til að búa til Prisma Client, framkvæma migrations og setja gögn í gagnagrunninn:
 
 ```bash
 npx prisma generate
@@ -48,7 +41,7 @@ npx prisma studio
 Þetta opnar Prisma Studio í vafranum, þar sem þú getur skoðað og breytt gögnum.
 
 ### **4. Keyra netþjóninn**
-Til að ræsa Express netþjóninn skaltu keyra:
+Til að ræsa Express netþjóninn skaltu keyra í rótinni:
 ```bash
 npm run dev
 ```
@@ -82,3 +75,10 @@ Ef þetta skilar **200 OK**, þá er netþjónninn keyrandi.
 ### **Tilbúið til notkunar!**
 Ef þú lendir í vandræðum, athugaðu **error skilaboð** og passaðu að `.env` skráin sé rétt uppsett.
 
+
+
+## STOFNA AÐGANG##
+PS: til að stofna test-aðgang skaltu keyra þetta í terminal
+curl -X POST http://localhost:3000/auth/register \
+     -H "Content-Type: application/json" \
+     -d '{"username": "nyrnotandi", "email": "notandi@example.com", "password": "mypassword"}'

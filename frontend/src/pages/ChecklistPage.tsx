@@ -78,13 +78,15 @@ const ChecklistPage: React.FC<ChecklistPageProps> = ({ onLogout }) => {
         ) : (
           items.map((item) => (
             <li key={item.id} className={`task-item ${item.completed ? "completed" : ""}`}>
-              <span className="task-text">{item.title}</span>
-              <input
-                type="checkbox"
-                checked={item.completed}
-                onChange={() => handleToggleComplete(item.id, item.completed)}
-              />
-            </li>
+            <span className="task-text">{item.title}</span>
+            <input
+               type="checkbox"
+               checked={item.completed}
+               onChange={() => handleToggleComplete(item.id, item.completed)}
+               aria-label={`Mark ${item.title} as completed`}
+            />
+          </li>
+          
           ))
         )}
       </ul>

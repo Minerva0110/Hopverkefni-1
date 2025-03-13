@@ -30,7 +30,7 @@ function App() {
   };
 
   return (
-    <Routes>  {/*Enginn <Router> hér */}
+    <Routes>  
       <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
       <Route path="/register" element={<RegisterPage onLogin={handleLogin} />} />
 
