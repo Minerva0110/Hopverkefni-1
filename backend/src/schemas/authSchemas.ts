@@ -14,6 +14,6 @@ export const registerSchema = userSchema.pick({
     role: true,
   });
 export const loginSchema = userSchema.pick({
-  email: true,
+  username: true,
   password: true,
 });

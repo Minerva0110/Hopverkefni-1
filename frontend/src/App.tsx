@@ -1,7 +1,8 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import LoginPage from "./pages/loginPage";
-import ChecklistPage from "./pages/homePage";
+import RegisterPage from "./pages/RegisterPage";
+import ChecklistPage from "./pages/ChecklistPage";
 import AdminDashboard from "./pages/adminDashboard";
 import "./App.css";
 
@@ -29,8 +30,9 @@ function App() {
   };
 
   return (
-    <Routes>
+    <Routes>  {/*Enginn <Router> hér */}
       <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+      <Route path="/register" element={<RegisterPage onLogin={handleLogin} />} />
 
       <Route 
         path="/admin-dashboard" 

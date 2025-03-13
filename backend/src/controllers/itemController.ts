@@ -1,68 +1,107 @@
-import { Request, Response } from 'express';
-import prisma from '../models/db.js';
+import { Request, Response } from "express";
+import prisma from "../models/db.js";
 
+// Sækja öll verkefni (items)
 export const getItems = async (req: Request, res: Response) => {
   try {
-    const items = await prisma.note.findMany();
+    const items = await prisma.item.findMany({
+      orderBy: { due: "asc" }, // Sýna næstu verkefni fyrst
+    });
     res.json(items);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch items' });
+    console.error("⚠️ Villa við að sækja verkefni:", error);
+    res.status(500).json({ error: "Mistókst að sækja verkefni" });
   }
 };
 
-export const getItemById = async (req: Request, res: Response): Promise<void> => {
-    try {
-      const { id } = req.params;
-      const item = await prisma.note.findUnique({ where: { id: Number(id) } });
-  
-      if (!item) {
-        res.status(404).json({ error: 'Item not found' });
-        return;
-      }
-  
-      res.json(item);
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch item' });
+// Sækja eitt verkefni eftir ID
+export const getItemById = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const item = await prisma.item.findUnique({ where: { id: Number(id) } });
+
+    if (!item) {
+      return res.status(404).json({ error: "Verkefni ekki fundið" });
     }
-  };
-  
+
+    res.json(item);
+  } catch (error) {
+    console.error("⚠️ Villa við að sækja eitt verkefni:", error);
+    res.status(500).json({ error: "Mistókst að sækja verkefni" });
+  }
+};
+
+// Búa til nýtt verkefni
 export const createItem = async (req: Request, res: Response) => {
   try {
-    const { userId, title, content, isPublic } = req.body;
+    const { title, description, priority, due } = req.body;
 
-    const newItem = await prisma.note.create({
-      data: { userId, title, content, isPublic }
+    if (!title || title.trim() === "") {
+      return res.status(400).json({ error: "Titill má ekki vera auður" });
+    }
+
+    const newItem = await prisma.item.create({
+      data: {
+        title,
+        description: description || "",
+        priority: priority || false,
+        due: due ? new Date(due) : null,
+        completed: false, // Byrjar óklárað
+      },
     });
 
+    console.log("Verkefni búið til:", newItem);
     res.status(201).json(newItem);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to create item' });
+    console.error("Villa við að búa til verkefni:", error);
+    res.status(500).json({ error: "Mistókst að búa til verkefni" });
   }
 };
 
+// Uppfæra verkefni (hægt að haka við sem klárað)
 export const updateItem = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-    const { title, content, isPublic } = req.body;
+    const { title, description, priority, completed } = req.body;
 
-    const updatedItem = await prisma.note.update({
+    const existingItem = await prisma.item.findUnique({ where: { id: Number(id) } });
+    if (!existingItem) {
+      return res.status(404).json({ error: "Verkefni ekki fundið" });
+    }
+
+    const updatedItem = await prisma.item.update({
       where: { id: Number(id) },
-      data: { title, content, isPublic }
+      data: {
+        title: title ?? existingItem.title,
+        description: description ?? existingItem.description,
+        priority: priority ?? existingItem.priority,
+        completed: completed ?? existingItem.completed,
+      },
     });
 
+    console.log("Verkefni uppfært:", updatedItem);
     res.json(updatedItem);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to update item' });
+    console.error("Villa við að uppfæra verkefni:", error);
+    res.status(500).json({ error: "Mistókst að uppfæra verkefni" });
   }
 };
 
+// 🗑 Eyða verkefni
 export const deleteItem = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    await prisma.note.delete({ where: { id: Number(id) } });
+    const existingItem = await prisma.item.findUnique({ where: { id: Number(id) } });
+    if (!existingItem) {
+      return res.status(404).json({ error: "Verkefni ekki fundið" });
+    }
+
+    await prisma.item.delete({ where: { id: Number(id) } });
+    console.log("🗑 Verkefni eytt með ID:", id);
     res.status(204).send();
   } catch (error) {
-    res.status(500).json({ error: 'Failed to delete item' });
+    console.error("Villa við að eyða verkefni:", error);
+    res.status(500).json({ error: "Mistókst að eyða verkefni" });
   }
 };
