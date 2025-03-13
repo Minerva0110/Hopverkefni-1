@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import LoginPage from "./pages/loginPage";
 import ChecklistPage from "./pages/homePage";
@@ -29,23 +29,21 @@ function App() {
   };
 
   return (
-    <Router>
-      <Routes>
-        <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
+    <Routes>
+      <Route path="/login" element={<LoginPage onLogin={handleLogin} />} />
 
-        <Route 
-          path="/admin-dashboard" 
-          element={role === "admin" ? <AdminDashboard onLogout={handleLogout} /> : <Navigate to="/checklist" />} 
-        />
+      <Route 
+        path="/admin-dashboard" 
+        element={role === "admin" ? <AdminDashboard onLogout={handleLogout} /> : <Navigate to="/checklist" />} 
+      />
 
-        <Route 
-          path="/checklist" 
-          element={token ? <ChecklistPage onLogout={handleLogout} /> : <Navigate to="/login" />} 
-        />
+      <Route 
+        path="/checklist" 
+        element={token ? <ChecklistPage onLogout={handleLogout} /> : <Navigate to="/login" />} 
+      />
 
-        <Route path="*" element={<Navigate to={token ? "/checklist" : "/login"} />} />
-      </Routes>
-    </Router>
+      <Route path="*" element={<Navigate to={token ? "/checklist" : "/login"} />} />
+    </Routes>
   );
 }
 
